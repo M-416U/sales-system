@@ -1,0 +1,102 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Customer {
+  CustomerID            Int       @id @default(autoincrement())
+  FullName              String
+  Email                 String    @unique
+  Phone                 String
+  Address               String
+  RegistrationDate      DateTime
+  SubscriptionStartDate DateTime
+  SubscriptionEndDate   DateTime
+  PaymentMethod         String
+  AssignedEmployeeID    Int
+  Notes                 String?
+  Invoice               Invoice[]
+  Employee              Employee? @relation(fields: [employeeEmployeeID], references: [EmployeeID])
+  employeeEmployeeID    Int?
+
+  @@map("customers")
+}
+
+model Invoice {
+  InvoiceID     Int      @id @default(autoincrement())
+  CustomerID    Int
+  InvoiceDate   DateTime
+  TotalAmount   Float
+  PaymentStatus String
+  PaymentMethod String
+  Notes         String?
+
+  Customer           Customer        @relation(fields: [CustomerID], references: [CustomerID])
+  InvoiceDetails     InvoiceDetail[]
+  Employee           Employee?       @relation(fields: [employeeEmployeeID], references: [EmployeeID])
+  employeeEmployeeID Int?
+
+  @@map("invoices")
+}
+
+model InvoiceDetail {
+  InvoiceDetailID Int   @id @default(autoincrement())
+  InvoiceID       Int
+  ProductID       Int
+  Quantity        Int
+  UnitPrice       Float
+  TotalPrice      Float
+
+  Invoice Invoice @relation(fields: [InvoiceID], references: [InvoiceID])
+  Product Product @relation(fields: [ProductID], references: [ProductID])
+
+  @@map("invoice_details")
+}
+
+model Product {
+  ProductID       Int     @id @default(autoincrement())
+  ProductName     String
+  Description     String?
+  Category        String
+  UnitPrice       Float
+  QuantityInStock Int
+  ReorderLevel    Int?
+  SupplierID      Int?
+
+  Supplier       Supplier?       @relation(fields: [SupplierID], references: [SupplierID])
+  InvoiceDetails InvoiceDetail[]
+
+  @@map("products")
+}
+
+model Supplier {
+  SupplierID   Int     @id @default(autoincrement())
+  SupplierName String
+  ContactName  String?
+  Email        String?
+  Phone        String?
+  Address      String?
+
+  Products Product[]
+
+  @@map("suppliers")
+}
+
+model Employee {
+  EmployeeID   Int      @id @default(autoincrement())
+  FullName     String
+  Email        String   @unique
+  Phone        String
+  Role         String // يمكن أن تكون: Admin, Accountant, Sales, Manager
+  PasswordHash String // لتخزين كلمة المرور المشفرة
+  CreatedAt    DateTime @default(now())
+
+  Customers Customer[] // علاقة مع العملاء
+  Invoices  Invoice[] // علاقة مع الفواتير
+
+  @@map("employees")
+}

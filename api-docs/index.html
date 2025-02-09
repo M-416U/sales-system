@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Documentation</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>API Documentation</h1>
+      <p>Welcome to the API documentation for the Sales Management System.</p>
+    </header>
+
+    <main>
+      <!-- قسم العملاء -->
+      <section id="customers">
+        <h2>Customers</h2>
+        <div class="endpoint">
+          <h3>Get All Customers</h3>
+          <p><strong>GET</strong> <code>/api/customers</code></p>
+          <button onclick="testEndpoint('GET', '/api/customers')">
+            Test Endpoint
+          </button>
+          <div class="response">
+            <h4>Response:</h4>
+            <pre><code id="response-get-customers"></code></pre>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <h3>Create a Customer</h3>
+          <p><strong>POST</strong> <code>/api/customers</code></p>
+          <button
+            onclick="testEndpoint('POST', '/api/customers', {
+          FullName: 'Jane Doe',
+          Email: 'jane.doe@example.com',
+          Phone: '0987654321',
+          Address: '456 Elm St',
+          RegistrationDate: '2023-10-02',
+          SubscriptionStartDate: '2023-10-02',
+          SubscriptionEndDate: '2024-10-02',
+          PaymentMethod: 'BankTransfer',
+          AssignedEmployeeID: 2,
+          Notes: 'New customer'
+        })"
+          >
+            Test Endpoint
+          </button>
+          <div class="response">
+            <h4>Response:</h4>
+            <pre><code id="response-post-customers"></code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- قسم الموظفين -->
+      <section id="employees">
+        <h2>Employees</h2>
+        <div class="endpoint">
+          <h3>Login</h3>
+          <p><strong>POST</strong> <code>/api/employees/login</code></p>
+          <button
+            onclick="testEndpoint('POST', '/api/employees/login', {
+          email: 'admin@example.com',
+          password: 'password123'
+        })"
+          >
+            Test Endpoint
+          </button>
+          <div class="response">
+            <h4>Response:</h4>
+            <pre><code id="response-login"></code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2023 Sales Management System</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
