@@ -1,13 +1,14 @@
 import { PrismaClient } from "@prisma/client";
 import { hashPassword, comparePassword } from "../utils/auth";
+import { IEmployee } from "../models/Employee";
 
 const prisma = new PrismaClient();
 
 export default class EmployeeService {
   // تسجيل موظف جديد
-  static async createEmployee(employeeData: any) {
-    const { password, ...rest } = employeeData;
-    const hashedPassword = await hashPassword(password);
+  static async createEmployee(employeeData: IEmployee) {
+    const { Password, ...rest } = employeeData;
+    const hashedPassword = await hashPassword(Password);
     return await prisma.employee.create({
       data: { ...rest, PasswordHash: hashedPassword },
     });
