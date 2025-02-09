@@ -1,5 +1,6 @@
 import express from "express";
 import CustomerController from "../controllers/CustomerController";
+import { authenticate, authorize } from "../middleware/auth";
 
 const router = express.Router();
 
@@ -32,7 +33,7 @@ const router = express.Router();
  *       400:
  *         description: Invalid input.
  */
-router.post("/", CustomerController.createCustomer);
+router.post("/", authenticate, CustomerController.createCustomer);
 
 /**
  * @swagger
@@ -50,7 +51,12 @@ router.post("/", CustomerController.createCustomer);
  *               items:
  *                 $ref: '#/components/schemas/Customer'
  */
-router.get("/", CustomerController.getCustomers);
+router.get(
+  "/",
+  authenticate,
+  authorize(["Admin"]),
+  CustomerController.getCustomers
+);
 
 /**
  * @swagger

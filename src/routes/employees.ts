@@ -177,7 +177,7 @@ router.delete("/:id", EmployeeController.deleteEmployee);
  *         - Email
  *         - Phone
  *         - Role
- *         - PasswordHash
+ *         - Password
  *       properties:
  *         EmployeeID:
  *           type: integer
@@ -194,7 +194,7 @@ router.delete("/:id", EmployeeController.deleteEmployee);
  *         Role:
  *           type: string
  *           description: The role of the employee (e.g., Admin, Accountant, Sales, Manager).
- *         PasswordHash:
+ *         Password:
  *           type: string
  *           description: The hashed password of the employee.
  *         CreatedAt:
@@ -207,7 +207,7 @@ router.delete("/:id", EmployeeController.deleteEmployee);
  *         Email: john.doe@example.com
  *         Phone: "1234567890"
  *         Role: "Admin"
- *         PasswordHash: "$2a$10$examplehash"
+ *         Password: "$2a$10$examplehash"
  *         CreatedAt: "2023-10-01T12:00:00Z"
  */
 
