@@ -1,5 +1,6 @@
 import express from "express";
 import EmployeeController from "../controllers/EmployeeController";
+import { authenticate, authorize } from "../middleware/auth";
 
 const router = express.Router();
 
@@ -16,6 +17,8 @@ const router = express.Router();
  *   post:
  *     summary: Create a new employee
  *     tags: [Employees]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -31,8 +34,16 @@ const router = express.Router();
  *               $ref: '#/components/schemas/Employee'
  *       400:
  *         description: Invalid input.
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
  */
-router.post("/", EmployeeController.createEmployee);
+router.post("/", 
+  authenticate, 
+  authorize(["ADMIN"]), 
+  EmployeeController.createEmployee
+);
 
 /**
  * @swagger
@@ -75,6 +86,8 @@ router.post("/login", EmployeeController.login);
  *   get:
  *     summary: Get all employees
  *     tags: [Employees]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of employees.
@@ -84,8 +97,16 @@ router.post("/login", EmployeeController.login);
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Employee'
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
  */
-router.get("/", EmployeeController.getEmployees);
+router.get("/", 
+  authenticate, 
+  authorize(["ADMIN", "MANAGER"]), 
+  EmployeeController.getEmployees
+);
 
 /**
  * @swagger
@@ -93,6 +114,8 @@ router.get("/", EmployeeController.getEmployees);
  *   get:
  *     summary: Get an employee by ID
  *     tags: [Employees]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -107,10 +130,18 @@ router.get("/", EmployeeController.getEmployees);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Employee'
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
  *       404:
  *         description: Employee not found.
  */
-router.get("/:id", EmployeeController.getEmployeeById);
+router.get("/:id", 
+  authenticate, 
+  authorize(["ADMIN", "MANAGER"]), 
+  EmployeeController.getEmployeeById
+);
 
 /**
  * @swagger
@@ -118,6 +149,8 @@ router.get("/:id", EmployeeController.getEmployeeById);
  *   put:
  *     summary: Update an employee
  *     tags: [Employees]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -138,12 +171,20 @@ router.get("/:id", EmployeeController.getEmployeeById);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Employee'
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
  *       404:
  *         description: Employee not found.
  *       400:
  *         description: Invalid input.
  */
-router.put("/:id", EmployeeController.updateEmployee);
+router.put("/:id", 
+  authenticate, 
+  authorize(["ADMIN"]), 
+  EmployeeController.updateEmployee
+);
 
 /**
  * @swagger
@@ -151,6 +192,8 @@ router.put("/:id", EmployeeController.updateEmployee);
  *   delete:
  *     summary: Delete an employee
  *     tags: [Employees]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -161,10 +204,18 @@ router.put("/:id", EmployeeController.updateEmployee);
  *     responses:
  *       204:
  *         description: Employee deleted successfully.
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
  *       404:
  *         description: Employee not found.
  */
-router.delete("/:id", EmployeeController.deleteEmployee);
+router.delete("/:id", 
+  authenticate, 
+  authorize(["ADMIN"]), 
+  EmployeeController.deleteEmployee
+);
 
 /**
  * @swagger

@@ -21,7 +21,11 @@ export default class EmployeeController {
     try {
       const { email, password } = req.body;
       const employee = await EmployeeService.login(email, password);
-      const token = generateToken(employee.EmployeeID, employee.Role);
+      const token = generateToken({
+        id: employee.EmployeeID,
+        role: employee.Role,
+        email: employee.Email,
+      });
       res.json({ token });
     } catch (error) {
       res.status(401).json({ message: "Login failed", error });

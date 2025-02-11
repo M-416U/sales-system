@@ -8,10 +8,11 @@ import customersRouter from "./routes/customers";
 import invoicesRouter from "./routes/invoices";
 import reportsRouter from "./routes/reports";
 import employeesRouter from "./routes/employees";
+import authRouter from "./routes/auth";
 import path from "path";
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -27,7 +28,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "http://localhost:3001",
         description: "Local server",
       },
     ],
@@ -39,6 +40,7 @@ const specs = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Routes
+app.use("/api/auth", authRouter);
 app.use("/api/customers", customersRouter);
 app.use("/api/invoices", invoicesRouter);
 app.use("/api/reports", reportsRouter);

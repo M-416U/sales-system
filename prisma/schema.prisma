@@ -95,8 +95,40 @@ model Employee {
   PasswordHash String // لتخزين كلمة المرور المشفرة
   CreatedAt    DateTime @default(now())
 
-  Customers Customer[] // علاقة مع العملاء
-  Invoices  Invoice[] // علاقة مع الفواتير
+  Customers     Customer[] // علاقة مع العملاء
+  Invoices      Invoice[] // علاقة مع الفواتير
+  RefreshTokens RefreshToken[]
+  Settings      Settings[]
 
   @@map("employees")
+}
+
+model RefreshToken {
+  id         Int      @id @default(autoincrement())
+  token      String   @unique
+  employeeId Int
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  employee Employee @relation(fields: [employeeId], references: [EmployeeID])
+
+  @@map("refresh_tokens")
+}
+
+model Settings {
+  id                Int      @id @default(autoincrement())
+  companyName       String
+  companyAddress    String
+  companyPhone      String
+  companyEmail      String
+  taxRate           Float    @default(0)
+  currency          String   @default("USD")
+  lowStockThreshold Int      @default(10)
+  invoicePrefix     String   @default("INV")
+  updatedAt         DateTime @updatedAt
+  updatedBy         Int
+  
+  employee Employee @relation(fields: [updatedBy], references: [EmployeeID])
+
+  @@map("settings")
 }

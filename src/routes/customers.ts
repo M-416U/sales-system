@@ -33,7 +33,11 @@ const router = express.Router();
  *       400:
  *         description: Invalid input.
  */
-router.post("/", authenticate, CustomerController.createCustomer);
+router.post("/", 
+  authenticate, 
+  authorize(["ADMIN", "MANAGER", "SALES"]), 
+  CustomerController.createCustomer
+);
 
 /**
  * @swagger
@@ -54,7 +58,7 @@ router.post("/", authenticate, CustomerController.createCustomer);
 router.get(
   "/",
   authenticate,
-  authorize(["Admin"]),
+  authorize(["ADMIN", "MANAGER", "SALES", "EMPLOYEE"]), 
   CustomerController.getCustomers
 );
 
@@ -81,7 +85,11 @@ router.get(
  *       404:
  *         description: Customer not found.
  */
-router.get("/:id", CustomerController.getCustomerById);
+router.get("/:id", 
+  authenticate, 
+  authorize(["ADMIN", "MANAGER", "SALES", "EMPLOYEE"]), 
+  CustomerController.getCustomerById
+);
 
 /**
  * @swagger
@@ -114,7 +122,11 @@ router.get("/:id", CustomerController.getCustomerById);
  *       400:
  *         description: Invalid input.
  */
-router.put("/:id", CustomerController.updateCustomer);
+router.put("/:id", 
+  authenticate, 
+  authorize(["ADMIN", "MANAGER", "SALES"]), 
+  CustomerController.updateCustomer
+);
 
 /**
  * @swagger
@@ -135,7 +147,11 @@ router.put("/:id", CustomerController.updateCustomer);
  *       404:
  *         description: Customer not found.
  */
-router.delete("/:id", CustomerController.deleteCustomer);
+router.delete("/:id", 
+  authenticate, 
+  authorize(["ADMIN", "MANAGER"]), 
+  CustomerController.deleteCustomer
+);
 
 /**
  * @swagger
